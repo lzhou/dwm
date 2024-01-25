@@ -1,5 +1,13 @@
 /* See LICENSE file for copyright and license details. */
 
+#include <X11/XF86keysym.h>
+
+/* If you use pipewire add somewhere in your constants definition section. Use "wpctl status" to
+   find out the real sink ID, 0 is a placeholder here. */
+static const char *upvol[]      = { "/usr/bin/wpctl", "set-volume", "@DEFAULT_SINK@", "5%+",    NULL };
+static const char *downvol[]    = { "/usr/bin/wpctl", "set-volume", "@DEFAULT_SINK@", "5%-",    NULL };
+static const char *mutevol[]    = { "/usr/bin/wpctl", "set-mute",   "@DEFAULT_SINK@", "toggle", NULL };
+
 /* appearance */
 static const unsigned int borderpx  = 1;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
@@ -95,6 +103,11 @@ static const Key keys[] = {
 	TAGKEYS(                        XK_8,                      7)
 	TAGKEYS(                        XK_9,                      8)
 	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
+
+        /* Pipewire volume control */
+        { 0, XF86XK_AudioLowerVolume, spawn, {.v = downvol } },
+        { 0, XF86XK_AudioMute, spawn, {.v = mutevol } },
+        { 0, XF86XK_AudioRaiseVolume, spawn, {.v = upvol   } },
 };
 
 /* button definitions */
@@ -113,4 +126,3 @@ static const Button buttons[] = {
 	{ ClkTagBar,            MODKEY,         Button1,        tag,            {0} },
 	{ ClkTagBar,            MODKEY,         Button3,        toggletag,      {0} },
 };
-
